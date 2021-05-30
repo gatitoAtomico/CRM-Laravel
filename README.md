@@ -38,7 +38,7 @@ Start the local development server
     Open xampp control panel start apache server and Mysql
     
 The public disk: A disk was created in config/filesystems.php that will hold the avatars of all the users.
-Create a new folder in the storage\app\public directory where the successfully uploaded avatar images will be stored and name it #user-avatar.
+Create a new folder in the storage\app\public directory where the successfully uploaded avatar images will be stored and name it user-avatar.
 Inside the folder upload an image and name it default.jpg (will act as a default image for all the users of the application before uplading their own avatar)
 
 To make all the user avatars publicly accessible run the following command:
