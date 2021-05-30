@@ -8,9 +8,9 @@ This repo is functionality complete — PRs and issues welcome!
 
 ## Installation
 
-Please check the official laravel installation guide for server requirements before you start. [Official Documentation](https://laravel.com/docs/5.4/installation#installation)
+Please check the official laravel installation guide for server requirements before you start. [Official Documentation](https://laravel.com/docs/7.x/installation)
 
-Installation using XAMPP web server
+Installation using XAMPP web server,
 Navigate to htdocs folder under xampp root directory
 
 Clone the repository
