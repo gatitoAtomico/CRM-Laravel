@@ -15,11 +15,11 @@ Navigate to htdocs folder under xampp root directory
 
 Clone the repository
 
-    git clone git@github.com:gothinkster/laravel-realworld-example-app.git
+    git clone git@github.com:gatitoAtomico/CRM-Laravel.git
 
 Switch to the repo folder
 
-    cd laravel-realworld-example-app
+    cd crmSim
 
 Install all the dependencies using composer
 
@@ -29,45 +29,30 @@ Copy the example env file and make the required configuration changes in the .en
 
     cp .env.example .env
 
-Generate a new application key
-
-    php artisan key:generate
-
-Generate a new JWT authentication secret key
-
-    php artisan jwt:generate
-
 Run the database migrations (**Set the database connection in .env before migrating**)
 
     php artisan migrate
 
 Start the local development server
 
-    php artisan serve
+    Open xampp control panel start apache server and Mysql
+    
+The public disk:
+To make all the user avatars publicly accessible run the following command:
 
-You can now access the server at http://localhost:8000
+    php artisan storage:link
 
-**TL;DR command list**
-
-    git clone git@github.com:gothinkster/laravel-realworld-example-app.git
-    cd laravel-realworld-example-app
-    composer install
-    cp .env.example .env
-    php artisan key:generate
-    php artisan jwt:generate 
+You can now access the server at http://localhost/crmSim/public/
     
 **Make sure you set the correct database connection information before running the migrations** [Environment variables](#environment-variables)
 
+    create a database in phpMyAdmin with the name crmsim
     php artisan migrate
     php artisan serve
 
 ## Database seeding
 
-**Populate the database with seed data with relationships which includes users, articles, comments, tags, favorites and follows. This can help you to quickly start testing the api or couple a frontend and start using it with ready content.**
-
-Open the DummyDataSeeder and set the property values as per your requirement
-
-    database/seeds/DummyDataSeeder.php
+**Populate the database with seed data with relationships which includes users, transactions, roles,  and User_Roles(pivot table). This can help you to quickly start testing the project and start using it with ready content.**
 
 Run the database seeder and you're done
 
@@ -77,62 +62,30 @@ Run the database seeder and you're done
 
     php artisan migrate:refresh
     
-## Docker
+## Projecct Specification
 
-To install with [Docker](https://www.docker.com), run following commands:
-
-```
-git clone git@github.com:gothinkster/laravel-realworld-example-app.git
-cd laravel-realworld-example-app
-cp .env.example.docker .env
-docker run -v $(pwd):/app composer install
-cd ./docker
-docker-compose up -d
-docker-compose exec php php artisan key:generate
-docker-compose exec php php artisan jwt:generate
-docker-compose exec php php artisan migrate
-docker-compose exec php php artisan db:seed
-docker-compose exec php php artisan serve --host=0.0.0.0
-```
-
-The api can be accessed at [http://localhost:8000/api](http://localhost:8000/api).
-
-## API Specification
-
-This application adheres to the api specifications set by the [Thinkster](https://github.com/gothinkster) team. This helps mix and match any backend with any other frontend without conflicts.
-
-> [Full API Spec](https://github.com/gothinkster/realworld/tree/master/api)
-
-More information regarding the project can be found here https://github.com/gothinkster/realworld
-
-----------
+The project aims to function as a simple crm application where the user can make and view transcations, also updating his profile avatar and personal info (name. lastName, email) 
 
 # Code overview
 
 ## Dependencies
 
-- [jwt-auth](https://github.com/tymondesigns/jwt-auth) - For authentication using JSON Web Tokens
-- [laravel-cors](https://github.com/barryvdh/laravel-cors) - For handling Cross-Origin Resource Sharing (CORS)
+- [Laravel-auth](https://laravel.com/docs/7.x/authentication) - For authentication installing laravel/ui and running php artisan ui vue --auth
+- [Boostrap 4](https://getbootstrap.com/docs/4.6/getting-started/introduction/) - Using Boostrap 4 classes designing the application
 
 ## Folders
 
 - `app` - Contains all the Eloquent models
-- `app/Http/Controllers/Api` - Contains all the api controllers
-- `app/Http/Middleware` - Contains the JWT auth middleware
-- `app/Http/Requests/Api` - Contains all the api form requests
-- `app/RealWorld/Favorite` - Contains the files implementing the favorite feature
-- `app/RealWorld/Filters` - Contains the query filters used for filtering api requests
-- `app/RealWorld/Follow` - Contains the files implementing the follow feature
-- `app/RealWorld/Paginate` - Contains the pagination class used to paginate the result
-- `app/RealWorld/Slug` - Contains the files implementing slugs to articles
-- `app/RealWorld/Transformers` - Contains all the data transformers
+- `app/Http/Controllers/` - Contains all the aplications and authntication controllers
+- `app/Http/Middleware` - Contains the make:auth auth middleware
+- `storage/app/public/user-avatar` - Contains the avatar images that are assigned for each user
+- `resources/views/` - Contains all the front end pages of the application (transactions, profile and home("admin page"))
+- `app/http/staticClasses` - Custom class created to hold static inforamtion about user roles (admin, user)
 - `config` - Contains all the application configuration files
-- `database/factories` - Contains the model factory for all the models
 - `database/migrations` - Contains all the database migrations
 - `database/seeds` - Contains the database seeder
-- `routes` - Contains all the api routes defined in api.php file
-- `tests` - Contains all the application tests
-- `tests/Feature/Api` - Contains all the api tests
+- `routes` - Contains all the api routes defined in web.php file
+
 
 ## Environment variables
 
@@ -142,41 +95,8 @@ More information regarding the project can be found here https://github.com/goth
 
 ----------
 
-# Testing API
-
-Run the laravel development server
-
-    php artisan serve
-
-The api can now be accessed at
-
-    http://localhost:8000/api
-
-Request headers
-
-| **Required** 	| **Key**              	| **Value**            	|
-|----------	|------------------	|------------------	|
-| Yes      	| Content-Type     	| application/json 	|
-| Yes      	| X-Requested-With 	| XMLHttpRequest   	|
-| Optional 	| Authorization    	| Token {JWT}      	|
-
-Refer the [api specification](#api-specification) for more info.
-
-----------
- 
 # Authentication
  
-This applications uses JSON Web Token (JWT) to handle authentication. The token is passed with each request using the `Authorization` header with `Token` scheme. The JWT authentication middleware handles the validation and authentication of the token. Please check the following sources to learn more about JWT.
+This applications uses csrf tokens to handle authentication. CSRF refers to Cross Site Forgery attacks on web applications. ... Laravel includes an in built CSRF plug-in, that generates tokens for each active user session. These tokens verify that the operations or requests are sent by the concerned authenticated user.
  
-- https://jwt.io/introduction/
-- https://self-issued.info/docs/draft-ietf-oauth-json-web-token.html
-
-----------
-
-# Cross-Origin Resource Sharing (CORS)
- 
-This applications has CORS enabled by default on all API endpoints. The default configuration allows requests from `http://localhost:3000` and `http://localhost:4200` to help speed up your frontend testing. The CORS allowed origins can be changed by setting them in the config file. Please check the following sources to learn more about CORS.
- 
-- https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS
-- https://en.wikipedia.org/wiki/Cross-origin_resource_sharing
-- https://www.w3.org/TR/cors
+- https://laravel.com/docs/7.x/csrf
