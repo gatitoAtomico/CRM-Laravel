@@ -51,7 +51,7 @@ You can now access the server at http://localhost/crmSim/public/
 
     create a database in phpMyAdmin with the name crmsim
     php artisan migrate
-    php artisan serve
+    php artisan serve or navigate to (http://localhost/crmSim/public/)
 
 ## Database seeding
 
